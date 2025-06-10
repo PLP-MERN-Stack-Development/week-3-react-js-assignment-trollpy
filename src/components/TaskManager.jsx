@@ -1,168 +1,99 @@
 import React, { useState, useEffect } from 'react';
-import Button from './Button';
+import { useLocalStorage } from '../hooks/useLocalStorage';
+import TaskForm from './TaskForm';
+import TaskFilter from './TaskFilter';
+import TaskItem from './TaskItem';
 
-/**
- * Custom hook for managing tasks with localStorage persistence
- */
-const useLocalStorageTasks = () => {
-  // Initialize state from localStorage or with empty array
-  const [tasks, setTasks] = useState(() => {
-    const savedTasks = localStorage.getItem('tasks');
-    return savedTasks ? JSON.parse(savedTasks) : [];
-  });
-
-  // Update localStorage when tasks change
-  useEffect(() => {
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-  }, [tasks]);
-
-  // Add a new task
-  const addTask = (text) => {
-    if (text.trim()) {
-      setTasks([
-        ...tasks,
-        {
-          id: Date.now(),
-          text,
-          completed: false,
-          createdAt: new Date().toISOString(),
-        },
-      ]);
-    }
-  };
-
-  // Toggle task completion status
-  const toggleTask = (id) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task
-      )
-    );
-  };
-
-  // Delete a task
-  const deleteTask = (id) => {
-    setTasks(tasks.filter((task) => task.id !== id));
-  };
-
-  return { tasks, addTask, toggleTask, deleteTask };
-};
-
-/**
- * TaskManager component for managing tasks
- */
 const TaskManager = () => {
-  const { tasks, addTask, toggleTask, deleteTask } = useLocalStorageTasks();
-  const [newTaskText, setNewTaskText] = useState('');
+  const [tasks, setTasks] = useLocalStorage('tasks', []);
   const [filter, setFilter] = useState('all');
 
-  // Filter tasks based on selected filter
-  const filteredTasks = tasks.filter((task) => {
+  const addTask = (text) => {
+    const newTask = {
+      id: Date.now(),
+      text,
+      completed: false,
+      createdAt: new Date().toISOString()
+    };
+    setTasks([...tasks, newTask]);
+  };
+
+  const toggleTaskComplete = (id) => {
+    setTasks(tasks.map(task =>
+      task.id === id ? { ...task, completed: !task.completed } : task
+    ));
+  };
+
+  const deleteTask = (id) => {
+    setTasks(tasks.filter(task => task.id !== id));
+  };
+
+  const filteredTasks = tasks.filter(task => {
     if (filter === 'active') return !task.completed;
     if (filter === 'completed') return task.completed;
-    return true; // 'all' filter
+    return true;
   });
 
-  // Handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    addTask(newTaskText);
-    setNewTaskText('');
+  const taskCounts = {
+    total: tasks.length,
+    active: tasks.filter(task => !task.completed).length,
+    completed: tasks.filter(task => task.completed).length
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-      <h2 className="text-2xl font-bold mb-6">Task Manager</h2>
-
-      {/* Task input form */}
-      <form onSubmit={handleSubmit} className="mb-6">
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={newTaskText}
-            onChange={(e) => setNewTaskText(e.target.value)}
-            placeholder="Add a new task..."
-            className="flex-grow px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
-          />
-          <Button type="submit" variant="primary">
-            Add Task
-          </Button>
-        </div>
-      </form>
-
-      {/* Filter buttons */}
-      <div className="flex gap-2 mb-4">
-        <Button
-          variant={filter === 'all' ? 'primary' : 'secondary'}
-          size="sm"
-          onClick={() => setFilter('all')}
-        >
-          All
-        </Button>
-        <Button
-          variant={filter === 'active' ? 'primary' : 'secondary'}
-          size="sm"
-          onClick={() => setFilter('active')}
-        >
-          Active
-        </Button>
-        <Button
-          variant={filter === 'completed' ? 'primary' : 'secondary'}
-          size="sm"
-          onClick={() => setFilter('completed')}
-        >
-          Completed
-        </Button>
-      </div>
-
-      {/* Task list */}
-      <ul className="space-y-2">
-        {filteredTasks.length === 0 ? (
-          <li className="text-gray-500 dark:text-gray-400 text-center py-4">
-            No tasks found
-          </li>
-        ) : (
-          filteredTasks.map((task) => (
-            <li
-              key={task.id}
-              className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:border-gray-700"
-            >
-              <div className="flex items-center gap-3">
-                <input
-                  type="checkbox"
-                  checked={task.completed}
-                  onChange={() => toggleTask(task.id)}
-                  className="h-5 w-5 text-blue-600 rounded focus:ring-blue-500"
-                />
-                <span
-                  className={`${
-                    task.completed ? 'line-through text-gray-500 dark:text-gray-400' : ''
-                  }`}
-                >
-                  {task.text}
-                </span>
-              </div>
-              <Button
-                variant="danger"
-                size="sm"
-                onClick={() => deleteTask(task.id)}
-                aria-label="Delete task"
-              >
-                Delete
-              </Button>
-            </li>
-          ))
-        )}
-      </ul>
-
-      {/* Task stats */}
-      <div className="mt-6 text-sm text-gray-500 dark:text-gray-400">
-        <p>
-          {tasks.filter((task) => !task.completed).length} tasks remaining
+    <div className="max-w-4xl mx-auto">
+      <div className="text-center mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+          Task Manager
+        </h1>
+        <p className="text-gray-600 dark:text-gray-400">
+          Stay organized and productive with your daily tasks
         </p>
       </div>
+
+      <TaskForm onAddTask={addTask} />
+      
+      {tasks.length > 0 && (
+        <TaskFilter
+          currentFilter={filter}
+          onFilterChange={setFilter}
+          taskCounts={taskCounts}
+        />
+      )}
+
+      <div className="space-y-3">
+        {filteredTasks.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-500 dark:text-gray-400 text-lg">
+              {tasks.length === 0
+                ? 'No tasks yet. Add your first task above!'
+                : `No ${filter} tasks found.`
+              }
+            </p>
+          </div>
+        ) : (
+          filteredTasks.map(task => (
+            <TaskItem
+              key={task.id}
+              task={task}
+              onToggleComplete={toggleTaskComplete}
+              onDeleteTask={deleteTask}
+            />
+          ))
+        )}
+      </div>
+
+      {tasks.length > 0 && (
+        <div className="mt-8 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
+          <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+            <span>Total: {taskCounts.total}</span>
+            <span>Active: {taskCounts.active}</span>
+            <span>Completed: {taskCounts.completed}</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default TaskManager; 
+export default TaskManager;

@@ -1,71 +1,167 @@
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-2e0aaae1b6195c2367325f4f02e2d04e9abb55f0b24a779b69b11b9e10269abc.svg)](https://classroom.github.com/online_ide?assignment_repo_id=19687861&assignment_repo_type=AssignmentRepo)
-# React.js and Tailwind CSS Assignment
+# Task Manager App
 
-This assignment focuses on building a responsive React application using JSX and Tailwind CSS, implementing component architecture, state management, hooks, and API integration.
+A modern, responsive task management application built with React, Vite, and Tailwind CSS. This application provides an intuitive interface for managing tasks with additional API data integration capabilities.
 
-## Assignment Overview
+## 🚀 Live Demo
 
-You will:
-1. Set up a React project with Vite and Tailwind CSS
-2. Create reusable UI components
-3. Implement state management using React hooks
-4. Integrate with external APIs
-5. Style your application using Tailwind CSS
+**[View Live Application](https://trollpy.github.io/task-manager-app/)**
 
-## Getting Started
+## 📱 Application Screenshot
 
-1. Accept the GitHub Classroom assignment invitation
-2. Clone your personal repository that was created by GitHub Classroom
-3. Install dependencies:
+![light mode](image.png)
+![dark mode](image-1.png)
+![api fetch](image-2.png)
+![api search](image-3.png)
+
+
+## ✨ Features
+
+- **Task Management**: Create, edit, delete, and organize tasks efficiently
+- **Responsive Design**: Optimized for desktop, tablet, and mobile devices
+- **Dark/Light Theme**: Toggle between dark and light modes for better user experience
+- **API Integration**: Dedicated page for API data visualization and management
+- **Modern UI**: Clean, professional interface built with Tailwind CSS
+- **Fast Performance**: Built with Vite for optimal build times and development experience
+
+## 🛠️ Technologies Used
+
+- **Frontend Framework**: React 19.1.0
+- **Build Tool**: Vite 6.3.5
+- **Styling**: Tailwind CSS 3.3.5
+- **Routing**: React Router DOM 7.6.2
+- **Development**: ESLint for code quality
+- **Deployment**: GitHub Pages
+
+## 🏗️ Project Structure
+
+```
+task-manager-app/
+├── public/
+├── src/
+│   ├── components/
+│   ├── contexts/
+│   ├── pages/
+│   ├── App.jsx
+│   ├── main.jsx
+│   └── index.css
+├── package.json
+├── vite.config.js
+└── README.md
+```
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js (version 14 or higher)
+- npm or yarn package manager
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/trollpy/task-manager-app.git
+   cd task-manager-app
    ```
+
+2. **Install dependencies**
+   ```bash
    npm install
    ```
-4. Start the development server:
-   ```
+
+3. **Start the development server**
+   ```bash
    npm run dev
    ```
 
-## Files Included
+4. **Open your browser**
+   Navigate to `http://localhost:5173` to view the application
 
-- `Week3-Assignment.md`: Detailed assignment instructions
-- Starter files for your React application:
-  - Basic project structure
-  - Pre-configured Tailwind CSS
-  - Sample component templates
+### Building for Production
 
-## Requirements
-
-- Node.js (v18 or higher)
-- npm or yarn
-- Modern web browser
-- Code editor (VS Code recommended)
-
-## Project Structure
-
-```
-src/
-├── components/       # Reusable UI components
-├── pages/           # Page components
-├── hooks/           # Custom React hooks
-├── context/         # React context providers
-├── api/             # API integration functions
-├── utils/           # Utility functions
-└── App.jsx          # Main application component
+```bash
+npm run build
 ```
 
-## Submission
+The build artifacts will be stored in the `dist/` directory.
 
-Your work will be automatically submitted when you push to your GitHub Classroom repository. Make sure to:
+### Deployment
 
-1. Complete all required components and features
-2. Implement proper state management with hooks
-3. Integrate with at least one external API
-4. Style your application with Tailwind CSS
-5. Deploy your application and add the URL to your README.md
+This project is configured for GitHub Pages deployment:
 
-## Resources
+```bash
+npm run deploy
+```
 
-- [React Documentation](https://react.dev/)
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
-- [Vite Documentation](https://vitejs.dev/guide/)
-- [React Router Documentation](https://reactrouter.com/) 
+## 🔧 Configuration
+
+### Vite Configuration
+
+The project uses a custom Vite configuration optimized for GitHub Pages deployment:
+
+```javascript
+// vite.config.js
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  base: '/task-manager-app/',
+})
+```
+
+### Routing
+
+The application uses HashRouter for compatibility with GitHub Pages static hosting:
+
+- Home/Tasks: `/#/` or `/#/tasks`
+- API Data: `/#/api-data`
+
+## 📦 Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
+- `npm run deploy` - Deploy to GitHub Pages
+
+## 🎨 Styling
+
+The application uses Tailwind CSS for styling with:
+- Responsive design utilities
+- Dark mode support
+- Custom color schemes
+- Smooth transitions and animations
+
+## 🔒 Browser Compatibility
+
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
+
+## 📈 Performance Features
+
+- Code splitting with React Router
+- Optimized asset bundling with Vite
+- Efficient CSS with Tailwind's purge functionality
+- Fast refresh during development
+
+## 🤝 Contributing
+
+I welcome contributions to improve this task manager application. Please feel free to:
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## 👨‍💻 Developer
+
+**Trollpy**
+- GitHub: [@trollpy](https://github.com/trollpy)
+- Project Repository: [task-manager-app](https://github.com/trollpy/task-manager-app)
